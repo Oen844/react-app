@@ -21,7 +21,7 @@ const defaultTodos = [
   },
   {
     text: "Empezar en Nextret",
-    completed: false,
+    completed: true,
   },
 ];
 
