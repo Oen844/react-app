@@ -2,24 +2,6 @@
 import React from "react";
 import { AppUI } from "./AppUI";
 
-// const defaultTodos = [
-//   {
-//     text: "Cortar cebolla",
-//     completed: false,
-//   },
-//   {
-//     text: "Aprender React",
-//     completed: false,
-//   },
-//   {
-//     text: "Entrevista de trabajo",
-//     completed: true,
-//   },
-//   {
-//     text: "Empezar en Nextret",
-//     completed: true,
-//   },
-// ];
 
 function App(props) {
   const localStorageTodos = localStorage.getItem("TODOS_V1");
