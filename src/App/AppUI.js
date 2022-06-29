@@ -6,13 +6,15 @@ import { TodoList } from "../TodoList";
 import { TodoItem } from "../TodoItem";
 
 function AppUI({
-    totalTodos,
-    completedTodo,
-    searchValue,
-    setSearchValue,
-    searchedTodos,
-    completeTodo,
-    deleteTodo,
+  loading,
+  error,
+  totalTodos,
+  completedTodo,
+  searchValue,
+  setSearchValue,
+  searchedTodos,
+  completeTodo,
+  deleteTodo,
 }) {
   return (
     <React.Fragment>
@@ -21,6 +23,9 @@ function AppUI({
       <TodoSearch searchValue={searchValue} setSearchValue={setSearchValue} />
 
       <TodoList>
+        {loading && <p>Loading...</p>}
+        {error && <p>Error...</p>}
+        {!loading && !searchedTodos.length && <p>Crea tu algun Todo</p>}
         {searchedTodos.map((todo) => (
           <TodoItem
             key={todo.text}

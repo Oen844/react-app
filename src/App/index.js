@@ -2,20 +2,53 @@
 import React from "react";
 import { AppUI } from "./AppUI";
 
+function useLocalStorage(itemName, initialValue) {
+  const [error, setError] = React.useState(false);
+  const [loading, setLoading] = React.useState(true);
+  const [item, setItem] = React.useState(initialValue);
+
+  React.useEffect(() => {
+    setTimeout(() => {
+      try {
+        const localStorageItem = localStorage.getItem(itemName);
+        let parsedItem;
+
+        if (!localStorageItem) {
+          localStorage.setItem(itemName, JSON.stringify(initialValue));
+          parsedItem = [];
+        } else {
+          parsedItem = JSON.parse(localStorageItem);
+        }
+
+        setItem(parsedItem);
+        setLoading(false);
+      } catch (error) {
+        setError(error);
+        console.log(error);
+      }
+    }, 1000);
+  });
+
+  const saveItem = (newItem) => {
+    try {
+      localStorage.setItem(itemName, JSON.stringify(newItem));
+      setItem(newItem);
+    } catch (error) {
+      setError(error);
+    }
+  };
+
+  return { item, saveItem, loading, error };
+}
 
 function App(props) {
-  const localStorageTodos = localStorage.getItem("TODOS_V1");
-  let parsedTodos;
+  const {
+    item: todos,
+    saveItem: saveTodos,
+    loading,
+    error,
+  } = useLocalStorage("TODOS_V1", []);
 
-  if(!localStorageTodos) {
-    localStorage.setItem('TODOS_V1', JSON.stringify([]));
-    parsedTodos = [];
-  } else {
-    parsedTodos = JSON.parse(localStorageTodos);
-  }
-
-
-  const [todos, setTodos] = React.useState(parsedTodos);
   const [searchValue, setSearchValue] = React.useState("");
 
   const completedTodos = todos.filter((todo) => todo.completed).length;
@@ -34,11 +67,6 @@ function App(props) {
     });
   }
 
-  const saveTodos = (newTodos) => {
-    localStorage.setItem('TODOS_V1', JSON.stringify(newTodos));
-    setTodos(newTodos);
-  }
-
   const completeTodo = (text) => {
     const todoIndex = todos.findIndex((todo) => todo.text === text);
     const newTodos = [...todos];
@@ -53,8 +81,19 @@ function App(props) {
     saveTodos(newTodos);
   };
 
+  // console.log('Render (antes del useEffct)');
+
+  // React.useEffect(() => {
+  //   console.log("useEffect");
+
+  // }, [totalTodos]);
+
+  // console.log('Render (despues del useEffct)');
+
   return (
-    <AppUI 
+    <AppUI
+      loading={loading}
+      error={error}
       totalTodos={totalTodos}
       completedTodos={completedTodos}
       searchValue={searchValue}
@@ -62,7 +101,6 @@ function App(props) {
       searchedTodos={searchedTodos}
       completeTodo={completeTodo}
       deleteTodo={deleteTodo}
-
     />
   );
 }
