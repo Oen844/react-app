@@ -4,8 +4,10 @@ import { TodoSearch } from "../TodoSearch";
 import { CreateTodoButton } from "../CreateTodoButton";
 import { TodoList } from "../TodoList";
 import { TodoItem } from "../TodoItem";
+import { TodoForm } from "../TodoForm";
 import { TodoContext } from "../TodoContex";
 import { Modal } from "../Modal";
+
 
 function AppUI() {
   const {
@@ -41,7 +43,7 @@ function AppUI() {
 
       {!!openModal && (
         <Modal>
-          <p>Modal</p>
+          <TodoForm/>
         </Modal>
       )}
 
